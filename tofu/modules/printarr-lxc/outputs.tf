@@ -8,7 +8,3 @@ output "container_id" {
   value       = proxmox_virtual_environment_container.this.vm_id
 }
 
-output "tailscale_hostname" {
-  description = "Tailscale MagicDNS hostname (hostname.tailnet)"
-  value       = "${var.hostname}.${var.tailscale_auth_key != "" ? "tailnet" : "local"}"
-}

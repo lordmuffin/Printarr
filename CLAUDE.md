@@ -31,7 +31,7 @@ Printarr is **the missing glue** — the automated orchestration between these l
 
 ### Deployment Model
 
-Docker Compose is the intended deployment strategy — Manyfold, Moonraker, Spoolman, and HomeBox run as containers. Tailscale mesh VPN provides secure remote access without port forwarding. OIDC handles unified authentication.
+Docker Compose is the intended deployment strategy — Manyfold, Moonraker, Spoolman, and HomeBox run as containers. Services communicate over the local network. OIDC handles unified authentication.
 
 ## Intended Stack (inferred from .gitignore)
 

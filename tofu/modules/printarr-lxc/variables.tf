@@ -47,12 +47,6 @@ variable "ssh_public_key" {
   type        = string
 }
 
-variable "tailscale_auth_key" {
-  description = "Tailscale pre-auth key for this container"
-  type        = string
-  sensitive   = true
-}
-
 variable "proxmox_node" {
   description = "Proxmox node name"
   type        = string

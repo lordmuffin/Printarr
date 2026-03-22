@@ -1,15 +1,6 @@
 # ── Phase 5: Fleet & AI (LXC 240) ───────────────────────────────────────────
 # OctoEverywhere companion agent + AI vision sidecar for HomeBox
 
-resource "tailscale_tailnet_key" "phase5_fleet" {
-  reusable      = false
-  ephemeral     = false
-  preauthorized = true
-  expiry        = 3600
-  tags          = [var.tailscale_tag]
-  description   = "printarr-fleet bootstrap key"
-}
-
 module "phase5_fleet" {
   source = "./modules/printarr-lxc"
 
@@ -23,8 +14,7 @@ module "phase5_fleet" {
   gateway    = var.gateway
   dns_server = var.dns_server
 
-  ssh_public_key     = var.ssh_public_key
-  tailscale_auth_key = tailscale_tailnet_key.phase5_fleet.key
+  ssh_public_key = var.ssh_public_key
 
   proxmox_node     = var.proxmox_node
   proxmox_bridge   = var.proxmox_bridge

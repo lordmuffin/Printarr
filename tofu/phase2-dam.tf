@@ -2,24 +2,6 @@
 # LXC 210: Manyfold + oauth2-proxy (Google OIDC)
 # LXC 211: Makers Vault
 
-resource "tailscale_tailnet_key" "phase2_manyfold" {
-  reusable      = false
-  ephemeral     = false
-  preauthorized = true
-  expiry        = 3600
-  tags          = [var.tailscale_tag]
-  description   = "printarr-manyfold bootstrap key"
-}
-
-resource "tailscale_tailnet_key" "phase2_vault" {
-  reusable      = false
-  ephemeral     = false
-  preauthorized = true
-  expiry        = 3600
-  tags          = [var.tailscale_tag]
-  description   = "printarr-vault bootstrap key"
-}
-
 module "phase2_manyfold" {
   source = "./modules/printarr-lxc"
 
@@ -33,8 +15,7 @@ module "phase2_manyfold" {
   gateway    = var.gateway
   dns_server = var.dns_server
 
-  ssh_public_key     = var.ssh_public_key
-  tailscale_auth_key = tailscale_tailnet_key.phase2_manyfold.key
+  ssh_public_key = var.ssh_public_key
 
   proxmox_node     = var.proxmox_node
   proxmox_bridge   = var.proxmox_bridge
@@ -61,8 +42,7 @@ module "phase2_vault" {
   gateway    = var.gateway
   dns_server = var.dns_server
 
-  ssh_public_key     = var.ssh_public_key
-  tailscale_auth_key = tailscale_tailnet_key.phase2_vault.key
+  ssh_public_key = var.ssh_public_key
 
   proxmox_node     = var.proxmox_node
   proxmox_bridge   = var.proxmox_bridge

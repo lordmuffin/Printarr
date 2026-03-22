@@ -1,14 +1,5 @@
 # ── Phase 1: Core (LXC 200) ─────────────────────────────────────────────────
-# Traefik reverse proxy + Tailscale subnet router
-
-resource "tailscale_tailnet_key" "phase1_core" {
-  reusable      = false
-  ephemeral     = false
-  preauthorized = true
-  expiry        = 3600
-  tags          = [var.tailscale_tag]
-  description   = "printarr-core bootstrap key"
-}
+# Traefik reverse proxy
 
 module "phase1_core" {
   source = "./modules/printarr-lxc"
@@ -23,8 +14,7 @@ module "phase1_core" {
   gateway    = var.gateway
   dns_server = var.dns_server
 
-  ssh_public_key     = var.ssh_public_key
-  tailscale_auth_key = tailscale_tailnet_key.phase1_core.key
+  ssh_public_key = var.ssh_public_key
 
   proxmox_node     = var.proxmox_node
   proxmox_bridge   = var.proxmox_bridge
@@ -35,5 +25,5 @@ module "phase1_core" {
   compose_source_root = var.compose_source_path
   compose_phase_dir   = "phase1-core"
 
-  tags = ["core", "traefik", "tailscale"]
+  tags = ["core", "traefik"]
 }

@@ -83,8 +83,6 @@ jobs:
           TF_VAR_proxmox_endpoint: ${{ secrets.PROXMOX_ENDPOINT }}
           TF_VAR_proxmox_api_token: ${{ env.PROXMOX_API_TOKEN }}
           TF_VAR_ssh_public_key: ${{ env.SSH_PUBLIC_KEY }}
-          TF_VAR_tailscale_api_key: ${{ secrets.TAILSCALE_API_KEY }}
-          TF_VAR_tailscale_tailnet: ${{ secrets.TAILSCALE_TAILNET }}
           TF_VAR_domain: ${{ secrets.DOMAIN }}
         run: tofu ${{ env.ACTION }} -input=false
 

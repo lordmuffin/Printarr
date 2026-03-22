@@ -1,5 +1,4 @@
 locals {
-  # Strip CIDR suffix to get bare IP for Tailscale hostname lookup
   bare_ip   = split("/", var.ip_address)[0]
   tags_full = concat(["printarr"], var.tags)
 }
@@ -103,21 +102,13 @@ resource "null_resource" "bootstrap" {
     ]
   }
 
-  # 2. Install Tailscale and join tailnet
-  provisioner "remote-exec" {
-    inline = [
-      "curl -fsSL https://tailscale.com/install.sh | sh",
-      "tailscale up --authkey=${var.tailscale_auth_key} --hostname=${var.hostname} --accept-routes",
-    ]
-  }
-
-  # 3. Copy compose files
+  # 2. Copy compose files
   provisioner "file" {
     source      = "${var.compose_source_root}/${var.compose_phase_dir}/"
     destination = "/opt/printarr"
   }
 
-  # 4. Start compose stack
+  # 3. Start compose stack
   provisioner "remote-exec" {
     inline = [
       "cd /opt/printarr && docker compose up -d --remove-orphans",

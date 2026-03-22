@@ -2,24 +2,6 @@
 # LXC 230: Moonraker proxy + Spoolman
 # LXC 231: HomeBox inventory
 
-resource "tailscale_tailnet_key" "phase4_orchestrator" {
-  reusable      = false
-  ephemeral     = false
-  preauthorized = true
-  expiry        = 3600
-  tags          = [var.tailscale_tag]
-  description   = "printarr-orchestrator bootstrap key"
-}
-
-resource "tailscale_tailnet_key" "phase4_inventory" {
-  reusable      = false
-  ephemeral     = false
-  preauthorized = true
-  expiry        = 3600
-  tags          = [var.tailscale_tag]
-  description   = "printarr-inventory bootstrap key"
-}
-
 module "phase4_orchestrator" {
   source = "./modules/printarr-lxc"
 
@@ -33,8 +15,7 @@ module "phase4_orchestrator" {
   gateway    = var.gateway
   dns_server = var.dns_server
 
-  ssh_public_key     = var.ssh_public_key
-  tailscale_auth_key = tailscale_tailnet_key.phase4_orchestrator.key
+  ssh_public_key = var.ssh_public_key
 
   proxmox_node     = var.proxmox_node
   proxmox_bridge   = var.proxmox_bridge
@@ -61,8 +42,7 @@ module "phase4_inventory" {
   gateway    = var.gateway
   dns_server = var.dns_server
 
-  ssh_public_key     = var.ssh_public_key
-  tailscale_auth_key = tailscale_tailnet_key.phase4_inventory.key
+  ssh_public_key = var.ssh_public_key
 
   proxmox_node     = var.proxmox_node
   proxmox_bridge   = var.proxmox_bridge

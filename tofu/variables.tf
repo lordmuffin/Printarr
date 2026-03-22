@@ -52,24 +52,6 @@ variable "proxmox_template_storage" {
   default     = "local"
 }
 
-# Tailscale
-variable "tailscale_api_key" {
-  description = "Tailscale API key for managing pre-auth keys"
-  type        = string
-  sensitive   = true
-}
-
-variable "tailscale_tailnet" {
-  description = "Tailscale tailnet name (e.g., example.com or example.ts.net)"
-  type        = string
-}
-
-variable "tailscale_tag" {
-  description = "Tailscale ACL tag applied to all Printarr nodes"
-  type        = string
-  default     = "tag:printarr"
-}
-
 # Networking
 variable "subnet_prefix" {
   description = "First three octets of the LAN subnet (e.g., 192.168.1)"

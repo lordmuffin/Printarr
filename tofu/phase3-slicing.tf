@@ -1,15 +1,6 @@
 # ── Phase 3: Headless Slicing (LXC 220) ─────────────────────────────────────
 # PrusaSlicer CLI + FastAPI REST wrapper
 
-resource "tailscale_tailnet_key" "phase3_slicer" {
-  reusable      = false
-  ephemeral     = false
-  preauthorized = true
-  expiry        = 3600
-  tags          = [var.tailscale_tag]
-  description   = "printarr-slicer bootstrap key"
-}
-
 module "phase3_slicer" {
   source = "./modules/printarr-lxc"
 
@@ -23,8 +14,7 @@ module "phase3_slicer" {
   gateway    = var.gateway
   dns_server = var.dns_server
 
-  ssh_public_key     = var.ssh_public_key
-  tailscale_auth_key = tailscale_tailnet_key.phase3_slicer.key
+  ssh_public_key = var.ssh_public_key
 
   proxmox_node     = var.proxmox_node
   proxmox_bridge   = var.proxmox_bridge
