@@ -24,6 +24,15 @@ jobs:
           sudo mv /tmp/tofu /usr/local/bin/tofu
           tofu version
 
+      - name: Install Docker Compose V2
+        run: |
+          COMPOSE_VERSION="2.35.0"
+          mkdir -p ~/.docker/cli-plugins
+          curl -Lo ~/.docker/cli-plugins/docker-compose \
+            "https://github.com/docker/compose/releases/download/v${COMPOSE_VERSION}/docker-compose-linux-x86_64"
+          chmod +x ~/.docker/cli-plugins/docker-compose
+          docker compose version
+
       - name: tofu fmt
         working-directory: tofu
         run: tofu fmt -check -recursive
@@ -36,24 +45,24 @@ jobs:
 
       - name: docker compose config (phase1-core)
         working-directory: docker/phase1-core
-        run: docker-compose config
+        run: docker compose config > /dev/null
 
       - name: docker compose config (phase2-dam/makers-vault)
         working-directory: docker/phase2-dam/makers-vault
-        run: docker-compose config
+        run: docker compose config > /dev/null
 
       - name: docker compose config (phase2-dam/manyfold)
         working-directory: docker/phase2-dam/manyfold
-        run: docker-compose config
+        run: docker compose config > /dev/null
 
       - name: docker compose config (phase3-slicing)
         working-directory: docker/phase3-slicing
-        run: docker-compose config
+        run: docker compose config > /dev/null
 
       - name: docker compose config (phase4-orchestration)
         working-directory: docker/phase4-orchestration
-        run: docker-compose config
+        run: docker compose config > /dev/null
 
       - name: docker compose config (phase5-fleet)
         working-directory: docker/phase5-fleet
-        run: docker-compose config
+        run: docker compose config > /dev/null
