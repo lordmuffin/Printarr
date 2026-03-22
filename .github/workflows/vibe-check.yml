@@ -36,24 +36,24 @@ jobs:
 
       - name: docker compose config (phase1-core)
         working-directory: docker/phase1-core
-        run: docker compose config --quiet
+        run: docker-compose config
 
       - name: docker compose config (phase2-dam/makers-vault)
         working-directory: docker/phase2-dam/makers-vault
-        run: docker compose config --quiet
+        run: docker-compose config
 
       - name: docker compose config (phase2-dam/manyfold)
         working-directory: docker/phase2-dam/manyfold
-        run: docker compose config --quiet
+        run: docker-compose config
 
       - name: docker compose config (phase3-slicing)
         working-directory: docker/phase3-slicing
-        run: docker compose config --quiet
+        run: docker-compose config
 
       - name: docker compose config (phase4-orchestration)
         working-directory: docker/phase4-orchestration
-        run: docker compose config --quiet
+        run: docker-compose config
 
       - name: docker compose config (phase5-fleet)
         working-directory: docker/phase5-fleet
-        run: docker compose config --quiet
+        run: docker-compose config
