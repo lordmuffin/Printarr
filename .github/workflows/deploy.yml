@@ -53,7 +53,7 @@ jobs:
         env:
           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
           SSH_PUBLIC_KEY: "op://HomeLab/GitHub-Homelab-Deployer SSH Key/public key"
-          PROXMOX_API_TOKEN: "op://HomeLab/Proxmox/api_token"
+          PROXMOX_API_TOKEN: "op://HomeLab/Proxmox/password"
 
       - name: Install OpenTofu
         run: |
