@@ -1,0 +1,59 @@
+name: Printarr Vibe Check
+
+on:
+  pull_request:
+    branches: ["main"]
+  push:
+    branches: ["main"]
+
+jobs:
+  vibe-check:
+    name: Vibe Check
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install OpenTofu
+        run: |
+          TOFU_VERSION="1.9.0"
+          curl -Lo /tmp/tofu.tar.gz \
+            "https://github.com/opentofu/opentofu/releases/download/v${TOFU_VERSION}/tofu_${TOFU_VERSION}_linux_amd64.tar.gz"
+          tar -xzf /tmp/tofu.tar.gz -C /tmp tofu
+          sudo mv /tmp/tofu /usr/local/bin/tofu
+          tofu version
+
+      - name: tofu fmt
+        working-directory: tofu
+        run: tofu fmt -check -recursive
+
+      - name: tofu validate
+        working-directory: tofu
+        run: |
+          tofu init -backend=false
+          tofu validate
+
+      - name: docker compose config (phase1-core)
+        working-directory: docker/phase1-core
+        run: docker compose config --quiet
+
+      - name: docker compose config (phase2-dam/makers-vault)
+        working-directory: docker/phase2-dam/makers-vault
+        run: docker compose config --quiet
+
+      - name: docker compose config (phase2-dam/manyfold)
+        working-directory: docker/phase2-dam/manyfold
+        run: docker compose config --quiet
+
+      - name: docker compose config (phase3-slicing)
+        working-directory: docker/phase3-slicing
+        run: docker compose config --quiet
+
+      - name: docker compose config (phase4-orchestration)
+        working-directory: docker/phase4-orchestration
+        run: docker compose config --quiet
+
+      - name: docker compose config (phase5-fleet)
+        working-directory: docker/phase5-fleet
+        run: docker compose config --quiet
