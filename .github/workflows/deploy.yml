@@ -53,8 +53,8 @@ jobs:
         env:
           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
           SSH_PUBLIC_KEY: "op://HomeLab/GitHub-Homelab-Deployer SSH Key/public key"
-          PROXMOX_API_TOKEN_USER: "op://HomeLab/Proxmox/username"
-          PROXMOX_API_TOKEN_SECRET: "op://HomeLab/Proxmox/password"
+          PROXMOX_API_TOKEN_USER: "op://HomeLab/pve opentofu API token proxmox/username"
+          PROXMOX_API_TOKEN_SECRET: "op://HomeLab/pve opentofu API token proxmox/password"
 
       - name: Construct Proxmox API Token
         run: echo "PROXMOX_API_TOKEN=${PROXMOX_API_TOKEN_USER}!${PROXMOX_API_TOKEN_SECRET}" >> $GITHUB_ENV
