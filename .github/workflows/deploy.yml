@@ -85,7 +85,7 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.TOFU_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.TOFU_SECRET_ACCESS_KEY }}
           TF_VAR_proxmox_endpoint: ${{ secrets.PROXMOX_ENDPOINT }}
-          TF_VAR_proxmox_api_token: $GITHUB_ENV
+          TF_VAR_proxmox_api_token: ${{ env.PROXMOX_API_TOKEN }}
           TF_VAR_ssh_public_key: ${{ env.SSH_PUBLIC_KEY }}
           TF_VAR_domain: ${{ secrets.DOMAIN }}
         run: tofu ${{ env.ACTION }} -input=false
