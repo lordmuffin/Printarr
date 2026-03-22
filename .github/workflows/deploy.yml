@@ -57,7 +57,7 @@ jobs:
 
       - name: Install OpenTofu
         run: |
-          TOFU_VERSION="1.9.0"
+          TOFU_VERSION="1.11.0"
           curl -Lo /tmp/tofu.tar.gz \
             "https://github.com/opentofu/opentofu/releases/download/v${TOFU_VERSION}/tofu_${TOFU_VERSION}_linux_amd64.tar.gz"
           tar -xzf /tmp/tofu.tar.gz -C /tmp tofu
