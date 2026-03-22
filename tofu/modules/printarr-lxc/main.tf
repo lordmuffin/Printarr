@@ -43,7 +43,6 @@ resource "proxmox_virtual_environment_container" "this" {
   disk {
     datastore_id = var.storage_pool
     size         = var.disk_size
-    interface    = "scsi0"
   }
 
   network_interface {
