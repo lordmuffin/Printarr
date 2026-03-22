@@ -13,10 +13,10 @@ resource "tailscale_tailnet_key" "phase1_core" {
 module "phase1_core" {
   source = "./modules/printarr-lxc"
 
-  vm_id    = 200
-  hostname = "printarr-core"
-  cores    = 2
-  memory   = 1024
+  vm_id     = 200
+  hostname  = "printarr-core"
+  cores     = 2
+  memory    = 1024
   disk_size = 10
 
   ip_address = "${var.subnet_prefix}.200/24"

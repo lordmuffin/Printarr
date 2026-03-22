@@ -27,7 +27,7 @@ resource "proxmox_virtual_environment_container" "this" {
 
     user_account {
       keys     = [var.ssh_public_key]
-      password = null  # Key-only authentication
+      password = null # Key-only authentication
     }
   }
 
@@ -57,11 +57,11 @@ resource "proxmox_virtual_environment_container" "this" {
   }
 
   features {
-    nesting = true  # Required for Docker-in-LXC
-    keyctl  = true  # Required for Docker image layer caching
+    nesting = true # Required for Docker-in-LXC
+    keyctl  = true # Required for Docker image layer caching
   }
 
-  unprivileged = true
+  unprivileged  = true
   start_on_boot = true
 
   lifecycle {
@@ -85,7 +85,7 @@ resource "null_resource" "bootstrap" {
     type        = "ssh"
     host        = local.bare_ip
     user        = "root"
-    private_key = null  # Relies on ssh-agent
+    private_key = null # Relies on ssh-agent
     timeout     = "5m"
   }
 

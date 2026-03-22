@@ -1,8 +1,8 @@
 output "phase1_core" {
   description = "Phase 1 core LXC details"
   value = {
-    ip_address       = module.phase1_core.ip_address
-    container_id     = module.phase1_core.container_id
+    ip_address         = module.phase1_core.ip_address
+    container_id       = module.phase1_core.container_id
     tailscale_hostname = module.phase1_core.tailscale_hostname
   }
 }
@@ -10,8 +10,8 @@ output "phase1_core" {
 output "phase2_manyfold" {
   description = "Phase 2 Manyfold LXC details"
   value = {
-    ip_address       = module.phase2_manyfold.ip_address
-    container_id     = module.phase2_manyfold.container_id
+    ip_address         = module.phase2_manyfold.ip_address
+    container_id       = module.phase2_manyfold.container_id
     tailscale_hostname = module.phase2_manyfold.tailscale_hostname
   }
 }
@@ -19,8 +19,8 @@ output "phase2_manyfold" {
 output "phase2_vault" {
   description = "Phase 2 Makers Vault LXC details"
   value = {
-    ip_address       = module.phase2_vault.ip_address
-    container_id     = module.phase2_vault.container_id
+    ip_address         = module.phase2_vault.ip_address
+    container_id       = module.phase2_vault.container_id
     tailscale_hostname = module.phase2_vault.tailscale_hostname
   }
 }
@@ -28,8 +28,8 @@ output "phase2_vault" {
 output "phase3_slicer" {
   description = "Phase 3 headless slicer LXC details"
   value = {
-    ip_address       = module.phase3_slicer.ip_address
-    container_id     = module.phase3_slicer.container_id
+    ip_address         = module.phase3_slicer.ip_address
+    container_id       = module.phase3_slicer.container_id
     tailscale_hostname = module.phase3_slicer.tailscale_hostname
   }
 }
@@ -37,8 +37,8 @@ output "phase3_slicer" {
 output "phase4_orchestrator" {
   description = "Phase 4 orchestrator LXC details (Moonraker + Spoolman)"
   value = {
-    ip_address       = module.phase4_orchestrator.ip_address
-    container_id     = module.phase4_orchestrator.container_id
+    ip_address         = module.phase4_orchestrator.ip_address
+    container_id       = module.phase4_orchestrator.container_id
     tailscale_hostname = module.phase4_orchestrator.tailscale_hostname
   }
 }
@@ -46,8 +46,8 @@ output "phase4_orchestrator" {
 output "phase4_inventory" {
   description = "Phase 4 inventory LXC details (HomeBox)"
   value = {
-    ip_address       = module.phase4_inventory.ip_address
-    container_id     = module.phase4_inventory.container_id
+    ip_address         = module.phase4_inventory.ip_address
+    container_id       = module.phase4_inventory.container_id
     tailscale_hostname = module.phase4_inventory.tailscale_hostname
   }
 }
@@ -55,8 +55,8 @@ output "phase4_inventory" {
 output "phase5_fleet" {
   description = "Phase 5 fleet LXC details (OctoEverywhere + AI)"
   value = {
-    ip_address       = module.phase5_fleet.ip_address
-    container_id     = module.phase5_fleet.container_id
+    ip_address         = module.phase5_fleet.ip_address
+    container_id       = module.phase5_fleet.container_id
     tailscale_hostname = module.phase5_fleet.tailscale_hostname
   }
 }
