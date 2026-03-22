@@ -1,0 +1,32 @@
+# Copy this file to terraform.tfvars and fill in your values.
+# Never commit terraform.tfvars — it is in .gitignore.
+
+# Proxmox
+proxmox_endpoint        = "https://192.168.1.10:8006"
+proxmox_api_token       = "terraform@pam!printarr=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+proxmox_insecure        = false        # Set true if using a self-signed cert
+proxmox_node            = "pve"
+proxmox_ssh_username    = "root"
+proxmox_bridge          = "vmbr0"
+proxmox_storage_pool    = "local-lvm"
+proxmox_lxc_template    = "ubuntu-24.04-standard_24.04-1_amd64.tar.zst"
+proxmox_template_storage = "local"
+
+# Tailscale
+tailscale_api_key  = "tskey-api-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+tailscale_tailnet  = "example.ts.net"
+tailscale_tag      = "tag:printarr"
+
+# Networking
+subnet_prefix = "192.168.1"   # LXCs will be .200–.240
+gateway       = "192.168.1.1"
+dns_server    = "1.1.1.1"
+
+# SSH key (paste the full public key)
+ssh_public_key = "ssh-ed25519 AAAA... user@host"
+
+# Domain
+domain = "home.example.com"
+
+# Local path to docker/ directory (used by provisioners to copy compose files)
+compose_source_path = "../docker"

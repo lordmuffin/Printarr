@@ -1,0 +1,78 @@
+---
+name: printarr-orchestration
+
+services:
+  moonraker:
+    image: mkuf/moonraker:latest
+    container_name: moonraker
+    restart: unless-stopped
+    environment:
+      # Connect to Klipper running on remote printer hardware (RPi)
+      # Moonraker supports TCP socket connections to a remote klippy host
+      - KLIPPY_HOST=${KLIPPY_HOST}
+      - KLIPPY_PORT=${KLIPPY_PORT:-7125}
+    volumes:
+      - ./moonraker.conf:/opt/moonraker/moonraker.conf:ro
+      - moonraker-data:/opt/moonraker/data
+      - /data/gcode:/gcode  # Shared G-code volume from slicer
+    networks:
+      - proxy
+      - internal
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.moonraker.rule=Host(`moonraker.${DOMAIN}`)
+      - traefik.http.routers.moonraker.entrypoints=websecure
+      - traefik.http.routers.moonraker.tls.certresolver=le
+      - traefik.http.services.moonraker.loadbalancer.server.port=7125
+
+  spoolman:
+    image: ghcr.io/donkie/spoolman:latest
+    container_name: spoolman
+    restart: unless-stopped
+    environment:
+      - SPOOLMAN_DB_TYPE=sqlite
+      - SPOOLMAN_DB_PATH=/home/app/.local/share/spoolman/spoolman.db
+      # Moonraker webhook — Spoolman registers itself; set in moonraker.conf
+      - SPOOLMAN_PORT=7912
+    volumes:
+      - spoolman-data:/home/app/.local/share/spoolman
+    networks:
+      - proxy
+      - internal
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.spoolman.rule=Host(`spoolman.${DOMAIN}`)
+      - traefik.http.routers.spoolman.entrypoints=websecure
+      - traefik.http.routers.spoolman.tls.certresolver=le
+      - traefik.http.services.spoolman.loadbalancer.server.port=7912
+
+  homebox:
+    image: ghcr.io/hay-kot/homebox:latest
+    container_name: homebox
+    restart: unless-stopped
+    environment:
+      - HBOX_OPTIONS_ALLOW_REGISTRATION=false
+      - HBOX_STORAGE_DATA=/data/storage
+    volumes:
+      - homebox-data:/data/storage
+    networks:
+      - proxy
+      - internal
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.homebox.rule=Host(`homebox.${DOMAIN}`)
+      - traefik.http.routers.homebox.entrypoints=websecure
+      - traefik.http.routers.homebox.tls.certresolver=le
+      - traefik.http.services.homebox.loadbalancer.server.port=7745
+
+volumes:
+  moonraker-data:
+  spoolman-data:
+  homebox-data:
+
+networks:
+  proxy:
+    external: true
+    name: proxy
+  internal:
+    internal: true

@@ -137,6 +137,13 @@ celerybeat.pid
 # Environments
 .env
 .envrc
+
+# OpenTofu / Terraform secrets
+tofu/terraform.tfvars
+tofu/.terraform/
+tofu/*.tfstate
+tofu/*.tfstate.backup
+tofu/.terraform.lock.hcl
 .venv
 env/
 venv/

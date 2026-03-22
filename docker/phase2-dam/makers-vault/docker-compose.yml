@@ -1,0 +1,50 @@
+---
+name: printarr-makers-vault
+
+services:
+  # oauth2-proxy fronts Makers Vault since it has no native OIDC support
+  oauth2-proxy:
+    image: quay.io/oauth2-proxy/oauth2-proxy:latest
+    container_name: makers-vault-proxy
+    restart: unless-stopped
+    command:
+      - --provider=google
+      - --upstream=http://makers-vault:8080
+      - --http-address=0.0.0.0:4180
+      - --email-domain=${GOOGLE_ALLOWED_DOMAIN}
+      - --cookie-secure=true
+      - --cookie-secret=${OAUTH2_PROXY_COOKIE_SECRET}
+      - --client-id=${GOOGLE_OIDC_CLIENT_ID}
+      - --client-secret=${GOOGLE_OIDC_CLIENT_SECRET}
+      - --redirect-url=https://vault.${DOMAIN}/oauth2/callback
+      - --skip-provider-button=true
+      - --silence-ping-logging=true
+    networks:
+      - proxy
+      - internal
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.makers-vault.rule=Host(`vault.${DOMAIN}`)
+      - traefik.http.routers.makers-vault.entrypoints=websecure
+      - traefik.http.routers.makers-vault.tls.certresolver=le
+      - traefik.http.services.makers-vault.loadbalancer.server.port=4180
+
+  makers-vault:
+    image: ghcr.io/vincentcinque/makersvault:latest
+    container_name: makers-vault
+    restart: unless-stopped
+    environment:
+      - VAULT_DATA_DIR=/data/db
+      - VAULT_MODELS_DIR=/models
+    volumes:
+      - /data/makers-vault/db:/data/db
+      - /data/makers-vault/models:/models
+    networks:
+      - internal
+
+networks:
+  proxy:
+    external: true
+    name: proxy
+  internal:
+    internal: true

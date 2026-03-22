@@ -1,0 +1,57 @@
+---
+name: printarr-slicer
+
+services:
+  prusaslicer:
+    image: ghcr.io/davidk/prusaslicer:latest
+    container_name: prusaslicer
+    restart: unless-stopped
+    environment:
+      - DISPLAY=:99
+    volumes:
+      - /data/slicer/profiles:/configs
+      - /data/slicer/output:/output
+      - /data/slicer/input:/input
+    networks:
+      - internal
+
+  # Thin FastAPI wrapper that accepts STL/3MF uploads and returns G-code
+  slicer-api:
+    build:
+      context: ./slicer-api
+      dockerfile: Dockerfile
+    container_name: slicer-api
+    restart: unless-stopped
+    environment:
+      - PRUSASLICER_BIN=/usr/bin/prusa-slicer
+      - PROFILES_DIR=/configs
+      - INPUT_DIR=/input
+      - OUTPUT_DIR=/output
+      - API_KEY=${SLICER_API_KEY}
+    volumes:
+      - /data/slicer/profiles:/configs:ro
+      - /data/slicer/output:/output
+      - /data/slicer/input:/input
+    depends_on:
+      - prusaslicer
+    networks:
+      - proxy
+      - internal
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.slicer.rule=Host(`slicer.${DOMAIN}`)
+      - traefik.http.routers.slicer.entrypoints=websecure
+      - traefik.http.routers.slicer.tls.certresolver=le
+      - traefik.http.services.slicer.loadbalancer.server.port=8000
+      # Restrict to internal networks — no public OIDC needed
+      - traefik.http.routers.slicer.middlewares=slicer-ipallow
+      - traefik.http.middlewares.slicer-ipallow.ipallowlist.sourcerange=${SLICER_ALLOWED_CIDRS}
+
+volumes: {}
+
+networks:
+  proxy:
+    external: true
+    name: proxy
+  internal:
+    internal: true

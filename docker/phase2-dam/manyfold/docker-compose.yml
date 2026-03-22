@@ -1,0 +1,60 @@
+---
+name: printarr-manyfold
+
+services:
+  manyfold:
+    image: ghcr.io/manyfold3d/manyfold:latest
+    container_name: manyfold
+    restart: unless-stopped
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - SECRET_KEY_BASE=${SECRET_KEY_BASE}
+      - REDIS_URL=redis://redis:6379/0
+      # Google OIDC (Manyfold uses OmniAuth)
+      - OIDC_ISSUER_URL=https://accounts.google.com
+      - OIDC_CLIENT_ID=${GOOGLE_OIDC_CLIENT_ID}
+      - OIDC_CLIENT_SECRET=${GOOGLE_OIDC_CLIENT_SECRET}
+      - OIDC_REDIRECT_URI=https://manyfold.${DOMAIN}/auth/google_oauth2/callback
+      # Puma / Rails
+      - RAILS_ENV=production
+      - RAILS_SERVE_STATIC_FILES=true
+      - RAILS_LOG_TO_STDOUT=true
+    volumes:
+      - /data/manyfold/models:/models
+      - /data/manyfold/storage:/storage
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - proxy
+      - internal
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.manyfold.rule=Host(`manyfold.${DOMAIN}`)
+      - traefik.http.routers.manyfold.entrypoints=websecure
+      - traefik.http.routers.manyfold.tls.certresolver=le
+      - traefik.http.services.manyfold.loadbalancer.server.port=3214
+
+  redis:
+    image: redis:7-alpine
+    container_name: manyfold-redis
+    restart: unless-stopped
+    volumes:
+      - redis-data:/data
+    networks:
+      - internal
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  redis-data:
+
+networks:
+  proxy:
+    external: true
+    name: proxy
+  internal:
+    internal: true

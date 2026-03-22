@@ -1,0 +1,52 @@
+---
+name: printarr-fleet
+
+services:
+  octoeverywhere:
+    image: octoeverywhere/agent:latest
+    container_name: octoeverywhere-agent
+    restart: unless-stopped
+    environment:
+      # Point at the Moonraker proxy on LXC 230
+      - MOONRAKER_URL=http://${MOONRAKER_HOST}:7125
+      - MOONRAKER_API_KEY=${MOONRAKER_API_KEY}
+      # OctoEverywhere account linking — run `docker exec octoeverywhere-agent link`
+      # after first start to get the pairing URL
+    volumes:
+      - octoeverywhere-data:/data
+    networks:
+      - internal
+
+  # AI vision sidecar — object recognition for HomeBox auto-tagging
+  homebox-ai:
+    image: ghcr.io/immich-app/machine-learning:release
+    container_name: homebox-ai
+    restart: unless-stopped
+    environment:
+      - MACHINE_LEARNING_MODEL_TTL=300
+      - MACHINE_LEARNING_WORKERS=1
+    volumes:
+      - homebox-ai-models:/cache
+    networks:
+      - proxy
+      - internal
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.homebox-ai.rule=Host(`ai.${DOMAIN}`)
+      - traefik.http.routers.homebox-ai.entrypoints=websecure
+      - traefik.http.routers.homebox-ai.tls.certresolver=le
+      - traefik.http.services.homebox-ai.loadbalancer.server.port=3003
+      # Internal network only
+      - traefik.http.routers.homebox-ai.middlewares=ai-ipallow
+      - traefik.http.middlewares.ai-ipallow.ipallowlist.sourcerange=${AI_ALLOWED_CIDRS}
+
+volumes:
+  octoeverywhere-data:
+  homebox-ai-models:
+
+networks:
+  proxy:
+    external: true
+    name: proxy
+  internal:
+    internal: true
