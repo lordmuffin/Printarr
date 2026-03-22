@@ -26,6 +26,10 @@ jobs:
     # and ensures direct access to Proxmox without exposing internal endpoints publicly.
     runs-on: self-hosted
     environment: nonprod
+    env:
+      ACTION: ""
+      PROXMOX_API_TOKEN: ""
+      SSH_PUBLIC_KEY: ""
 
     steps:
       - name: Checkout Repository
@@ -57,7 +61,7 @@ jobs:
           PROXMOX_API_TOKEN_SECRET: "op://HomeLab/pve opentofu API token proxmox/password"
 
       - name: Construct Proxmox API Token
-        run: echo "PROXMOX_API_TOKEN=${PROXMOX_API_TOKEN_USER}!${PROXMOX_API_TOKEN_SECRET}" >> $GITHUB_ENV
+        run: echo "PROXMOX_API_TOKEN=${PROXMOX_API_TOKEN_USER}=${PROXMOX_API_TOKEN_SECRET}" >> $GITHUB_ENV
 
       - name: Install OpenTofu
         run: |
